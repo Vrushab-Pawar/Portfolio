@@ -11,19 +11,24 @@ export default function Hero() {
 
   // Typewriter Effect using requestAnimationFrame
   useEffect(() => {
-    let frameId: number;
+  let frameId: ReturnType<typeof setTimeout>;
 
-    const typeWriter = () => {
-      setText(fullText.slice(0, indexRef.current));
-      if (indexRef.current <= fullText.length) {
-        indexRef.current++;
-        frameId = setTimeout(() => requestAnimationFrame(typeWriter), 75);
-      }
-    };
+  const typeWriter = () => {
+    setText(fullText.slice(0, indexRef.current));
+    if (indexRef.current <= fullText.length) {
+      indexRef.current++;
+      frameId = setTimeout(() => {
+        requestAnimationFrame(typeWriter);
+      }, 75);
+    }
+  };
 
-    typeWriter();
-    return () => clearTimeout(frameId);
-  }, []);
+  typeWriter();
+
+  return () => {
+    clearTimeout(frameId);
+  };
+}, []);
 
   const floatingDots = useMemo(() =>
     Array.from({ length: 40 }).map(() => ({
